@@ -46,6 +46,6 @@ Software: Arduino IDE, mySQL, SWIFT
 
 ## References
 --------
-All that GLITTERs: Low-Power Spoof-Resilient Optical Markers for Augmented Reality, IPSN’20
+1. [All that GLITTERs: Low-Power Spoof-Resilient Optical Markers for Augmented Reality, IPSN’20](https://users.ece.cmu.edu/~vsekar/assets/pdf/ipsn20_glitter.pdf)
 
-DeepLight: Robust & Unobtrusive Real-time Screen-Camera Communication for Real-World Displays, IPSN’21
+2. [DeepLight: Robust & Unobtrusive Real-time Screen-Camera Communication for Real-World Displays, IPSN’21](https://arxiv.org/pdf/2105.05092.pdf)
