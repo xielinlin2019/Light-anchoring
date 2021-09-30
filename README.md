@@ -43,6 +43,9 @@ Software: Arduino IDE, mySQL, SWIFT
 
 ## Project Timeline
 --------
+1. Finish the hardware parts by Oct. 14.
+2. Implement decoding, smartphone apps and database by Nov. 4
+3. Connect all work together and test and tune parameters by Nov. 25
 
 ## References
 --------
