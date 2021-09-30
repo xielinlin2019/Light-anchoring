@@ -14,9 +14,11 @@ To implement all the anchoring functions, and to explore more features of as muc
 
 ## Deliverables
 --------
-Implement hardware prototype for LED encoding
-Receive LED encoded patterns on smartphone camera and decode the pattern (encoder ID)
-Precisely overlay encoder ID on smartphone screen
+Implement hardware prototype for LED encoding.
+
+Receive LED encoded patterns on smartphone camera and decode the pattern (encoder ID).
+
+Precisely overlay encoder ID on smartphone screen.
 
 ## System Blocks
 --------
@@ -45,4 +47,5 @@ Software:
 ## References
 --------
 All that GLITTERs: Low-Power Spoof-Resilient Optical Markers for Augmented Reality, IPSN’20
+
 DeepLight: Robust & Unobtrusive Real-time Screen-Camera Communication for Real-World Displays, IPSN’21
