@@ -9,11 +9,14 @@ As we noticed this Light-anchoring technology have some advantages over QR code,
 
 ## Design Goals
 --------
+Create a light-based anchor to precisely overlay content on smartphone screen.
 To implement all the anchoring functions, and to explore more features of as much as possible.
 
 ## Deliverables
 --------
-
+Implement hardware prototype for LED encoding
+Receive LED encoded patterns on smartphone camera and decode the pattern (encoder ID)
+Precisely overlay encoder ID on smartphone screen
 
 ## System Blocks
 --------
