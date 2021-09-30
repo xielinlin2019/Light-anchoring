@@ -5,7 +5,7 @@
 
 ## Motivation
 --------
-As we noticed this Light-anchoring technology have some advantages over QR code, we saw the world-changing potential on it. As a result, we are going to work it out.
+Existing anchoring techniques like QR tags have limited ranges and are easy to spoof. Light based anchors (LEDs) on the other hand are more robust, not obtrusive and not easy to spoof for information. They can also work with smart phone cameras which is a plus with the increased spread of mobile phones. This advantages over other technologies motivated us to work on this project.
 
 ## Design Goals
 --------
@@ -27,8 +27,8 @@ Software:
 
 ## HW/SW requirements
 --------
-Hardware:LEDs, microcontroller (BLE), smartphone
-Software:
+Hardware:LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
+Software: Arduino IDE,
 
 ## Team Members Responsibilities
 --------
