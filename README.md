@@ -25,7 +25,7 @@ Software:
 
 ## HW/SW requirements
 --------
-Hardware:
+Hardware:LEDs, microcontroller (BLE), smartphone
 Software:
 
 ## Team Members Responsibilities
@@ -44,3 +44,5 @@ Software:
 
 ## References
 --------
+All that GLITTERs: Low-Power Spoof-Resilient Optical Markers for Augmented Reality, IPSN’20
+DeepLight: Robust & Unobtrusive Real-time Screen-Camera Communication for Real-World Displays, IPSN’21
