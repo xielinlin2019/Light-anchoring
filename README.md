@@ -28,7 +28,7 @@ Software:
 ## HW/SW requirements
 --------
 Hardware:LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
-Software: Arduino IDE,
+Software: Arduino IDE, mySQL, SWIFT
 
 ## Team Members Responsibilities
 --------
