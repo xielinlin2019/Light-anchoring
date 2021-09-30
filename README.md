@@ -27,14 +27,14 @@ Precisely overlay encoder ID on smartphone screen.
 
 ## HW/SW requirements
 --------
-Hardware:LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
+Hardware: LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
 Software: Arduino IDE, mySQL, SWIFT
 
 ## Team Members Responsibilities
 --------
-*Jingyi Chen*: Programming interface between hardware and mobile application;   
+*Jingyi Chen*: Programming interface between hardware and mobile IOS application;   
 
-*Linfeng Zhang*:  Coding signals and its corresponding software part;   
+*Linfeng Zhang*:  Coding signals and its corresponding software Arduino part;   
 
 *Linlin Xie*: Programming interface of Unity to implement the tag anchoring;   
 
