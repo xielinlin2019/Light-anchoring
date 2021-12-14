@@ -55,7 +55,7 @@ private class LuminosityAnalyzer(private val listener: AnchorListener) : ImageAn
     var m: Int = 0
     var frame = 0
     var codeq = Deque(8)
-    var encoderIds = arrayOf("01101001",)
+    var encoderIds = arrayOf("01101001","11111111")
     var code: String? = null
 
     private fun ByteBuffer.toByteArray(): ByteArray {
@@ -100,6 +100,7 @@ private class LuminosityAnalyzer(private val listener: AnchorListener) : ImageAn
             codeq.append(0)
         }
         //println("$cx, $cy, $m, ${codeq}")
+        println(codeq.getString())
         for (id in encoderIds){
             if (codeq.getString().contains(id)){
                 code = id
@@ -180,7 +181,8 @@ class MainActivity : AppCompatActivity() {
                             topMargin =  (cx * viewFinder.height).toInt()
                             leftMargin = ((1-cy) * viewFinder.width).toInt()
                         }
-                        detectTextView.text = code
+                        detectTextView.visibility = View.VISIBLE
+                        detectTextView.text = "encoderID:"+code
                     }
                 })
 
