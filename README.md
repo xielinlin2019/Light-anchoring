@@ -22,7 +22,7 @@ Precisely overlay encoder ID on smartphone screen.
 
 ## System Blocks
 --------
-![image](https://user-images.githubusercontent.com/50798240/135495934-16a87bbf-704c-4758-8256-aa224fa5de1e.png)
+![157761639514746_ pic](https://user-images.githubusercontent.com/50798240/146076767-48db1539-90ec-496c-bad4-c9436eb7f591.jpg)
 
 
 ## HW/SW requirements
