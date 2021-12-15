@@ -28,7 +28,7 @@ Precisely overlay encoder ID on smartphone screen.
 ## HW/SW requirements
 --------
 Hardware: LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
-Software: Arduino IDE, mySQL, SWIFT
+Software: Arduino IDE, Android Studio, Kotlin
 
 ## Team Members Responsibilities
 --------
@@ -36,7 +36,7 @@ Software: Arduino IDE, mySQL, SWIFT
 
 *Linfeng Zhang*:  Coding signals and its corresponding software Arduino part;   
 
-*Linlin Xie*: Programming interface of Unity to implement the tag anchoring;   
+*Linlin Xie*: Programming interface of Kotlin to implement the tag anchoring;   
 
 *Mercy Kyatha*: Hardware part of the LED and detector, as well as being the instructor in hardware field.   
 
@@ -44,7 +44,7 @@ Software: Arduino IDE, mySQL, SWIFT
 ## Project Timeline
 --------
 1. Finish the hardware parts by Oct. 14.
-2. Implement decoding, smartphone apps and database by Nov. 4
+2. Implement decoding, smartphone app by Nov. 4
 3. Connect all work together and test and tune parameters by Nov. 25
 
 ## References
