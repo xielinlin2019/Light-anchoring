@@ -1,12 +1,22 @@
 package com.example.camera
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.hardware.camera2.CaptureRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.app.Activity
+import android.bluetooth.*
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanFilter
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
+import android.os.Build
+import android.util.Log.INFO
 import android.util.Range
 import android.util.Size
 import android.view.View
@@ -28,10 +38,16 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.ArrayDeque
 import kotlin.math.max
+import androidx.fragment.*
+import androidx.fragment.app.FragmentActivity
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.logging.Level.INFO
 import kotlin.math.min
 
 typealias LumaListener = (luma: Double?) -> Unit
 typealias AnchorListener = (cx: Float, cy:Float, code:String?) -> Unit
+private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
 
 class Deque(private val maxlen: Int) {
     var deque = ArrayDeque<Int>()
@@ -47,7 +63,6 @@ class Deque(private val maxlen: Int) {
         return deque.toString()
     }
 }
-
 
 private class LuminosityAnalyzer(private val listener: AnchorListener) : ImageAnalysis.Analyzer {
     var cx = 0f
@@ -117,9 +132,33 @@ private class LuminosityAnalyzer(private val listener: AnchorListener) : ImageAn
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
-
+    private var matchedDevice: BluetoothDevice? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+
+    private val bluetoothAdapter: BluetoothAdapter by lazy {
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothManager.adapter
+    }
+
+    private val scanSettings = ScanSettings.Builder()
+        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+        .build()
+
+    private fun promptEnableBluetooth() {
+        if (!bluetoothAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            val fragment = FragmentActivity()
+            fragment.startActivityForResult(enableBtIntent, ENABLE_BLUETOOTH_REQUEST_CODE)
+        }
+    }
+
+    private val scanResults = mutableListOf<ScanResult>()
+    private val characteristicsValue = mutableListOf<ByteArray>()
+    private val countDownLatch = CountDownLatch(1)
+
+    private var isScanning = false
+    private var isConnecting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +166,7 @@ class MainActivity : AppCompatActivity() {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
+            startBLEScanning()
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
@@ -181,8 +221,33 @@ class MainActivity : AppCompatActivity() {
                             topMargin =  (cx * viewFinder.height).toInt()
                             leftMargin = ((1-cy) * viewFinder.width).toInt()
                         }
+
                         detectTextView.visibility = View.VISIBLE
-                        detectTextView.text = "encoderID:"+code
+                        detectTextView.text = "encoderID:" + code
+                        if(!scanResults.isEmpty()) {
+                            val iterator = scanResults.iterator();
+                            while(iterator.hasNext()) {
+                                val result = iterator.next()
+                                if(matchedDevice == null) {
+                                    if (result.device.name != null && result.device.name.equals(code)) {
+                                        matchedDevice = result.device
+                                    }
+                                }
+                                if(matchedDevice != null){
+                                    if(characteristicsValue.isEmpty() && isConnecting == false) {
+                                        result.device.connectGatt(this, false, gattCallback)
+                                        isConnecting = true
+                                    }
+                                    if(!characteristicsValue.isEmpty()) {
+                                        val iterator2 = characteristicsValue.iterator();
+                                        while(iterator2.hasNext()) {
+                                            detectTextView.text =
+                                                "encoderID:" + code + String(iterator2.next(), Charsets.UTF_8)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 })
 
@@ -209,6 +274,21 @@ class MainActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    private fun startBLEScanning() {
+//        val filters = ArrayList<ScanFilter>()
+//        val filter = ScanFilter.Builder()
+//            .setDeviceName("ProjectZero")
+//            .build()
+//        filters.add(filter)
+        if(!isScanning) {
+            bluetoothAdapter.bluetoothLeScanner.startScan(
+                null,
+                scanSettings,
+                scanCallback
+            )
+            isScanning = true;
+        }
+    }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -226,6 +306,14 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         cameraExecutor.shutdown()
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (!bluetoothAdapter.isEnabled) {
+            promptEnableBluetooth()
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray) {
@@ -233,6 +321,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
                 startCamera()
+                startBLEScanning()
             } else {
                 Toast.makeText(this,
                     "Permissions not granted by the user.",
@@ -242,10 +331,73 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val scanCallback = object : ScanCallback() {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+            val indexQuery = scanResults.indexOfFirst { it.device.address == result.device.address }
+            if (indexQuery != -1) { // A scan result already exists with the same address
+                scanResults[indexQuery] = result
+            } else {
+                scanResults.add(result)
+            }
+            isScanning = false;
+        }
+
+        override fun onScanFailed(errorCode: Int) {
+            Log.i("TAG","onScanFailed: code $errorCode")
+        }
+    }
+
+    private val gattCallback = object : BluetoothGattCallback() {
+        // Result of a characteristic read operation
+        override fun onCharacteristicRead(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
+        ) {
+            when (status) {
+                BluetoothGatt.GATT_SUCCESS -> {
+                    if (characteristic != null && characteristic.value != null) {
+                        characteristicsValue.add(characteristic.value)
+                    }
+                }
+            }
+        }
+
+        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+            if (newState == BluetoothGatt.STATE_CONNECTED) {
+                gatt?.requestMtu(256)
+                gatt?.discoverServices()
+            } else {
+                Log.i("1","1")
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            val it = gatt?.services?.iterator()
+            while(it?.hasNext() == true) {
+                val it2 = it.next().characteristics.iterator()
+                while(it2.hasNext()) {
+                    var temp = it2.next()
+                    if(temp.uuid.equals(UUID.fromString("f0001131-0451-4000-b000-000000000000"))) {
+                        gatt.readCharacteristic(temp)
+                        //if(countDownLatch.await(3, TimeUnit.SECONDS)) {}
+                    }
+                }
+            }
+
+        }
+
+
+    }
+
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 }
