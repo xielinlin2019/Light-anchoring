@@ -32,7 +32,7 @@ Software: Arduino IDE, Android Studio, Kotlin
 
 ## Team Members Responsibilities
 --------
-*Jingyi Chen*: Programming interface between hardware and mobile IOS application;   
+*Jingyi Chen*: Programming the encoding and modulation part, designing decoding and detection algorithm, programming the Android App;   
 
 *Linfeng Zhang*:  Coding signals and its corresponding software Arduino part;   
 
