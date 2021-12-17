@@ -70,7 +70,7 @@ private class LuminosityAnalyzer(private val listener: AnchorListener) : ImageAn
     var m: Int = 0
     var frame = 0
     var codeq = Deque(8)
-    var encoderIds = arrayOf("01101001","11111111")
+    var encoderIds = arrayOf("01101001")
     var code: String? = null
 
     private fun ByteBuffer.toByteArray(): ByteArray {
