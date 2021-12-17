@@ -32,13 +32,13 @@ Software: Arduino IDE, Android Studio, Kotlin
 
 ## Team Members Responsibilities
 --------
-*Jingyi Chen*: Programming the encoding and modulation part, designing decoding and detection algorithm, programming the Android App;   
+*Jingyi Chen*: Programming the encoding and modulation part, designing decoding and detection algorithm;   
 
 *Linfeng Zhang*:  Coding signals and its corresponding software Arduino part;   
 
-*Linlin Xie*: Programming interface of Kotlin to implement the tag anchoring;   
+*Linlin Xie*: detection and decoding, programming the Android App;   
 
-*Mercy Kyatha*: Hardware part of the LED and detector, as well as being the instructor in hardware field.   
+*Mercy Kyatha*: Hardware part of the LED and encoder, as well as being the instructor in hardware field.   
 
 
 ## Project Timeline
