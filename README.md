@@ -1,5 +1,4 @@
 # Light-anchoring
-697SD UMass Amherst 2021 FALL
 
 
 
@@ -29,23 +28,6 @@ Precisely overlay encoder ID on smartphone screen.
 --------
 Hardware: LEDs, Adafruit Feather nRF52 Bluefruit LE - nRF52832, smartphone
 Software: Arduino IDE, Android Studio, Kotlin
-
-## Team Members Responsibilities
---------
-*Jingyi Chen*: Programming the encoding and modulation part, designing decoding and detection algorithm;   
-
-*Linfeng Zhang*:  Coding signals and its corresponding software Arduino part;   
-
-*Linlin Xie*: detection and decoding, programming the Android App;   
-
-*Mercy Kyatha*: Hardware part of the LED and encoder, as well as being the instructor in hardware field.   
-
-
-## Project Timeline
---------
-1. Finish the hardware parts by Oct. 14.
-2. Implement decoding, smartphone app by Nov. 4
-3. Connect all work together and test and tune parameters by Nov. 25
 
 ## References
 --------
